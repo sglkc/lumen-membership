@@ -21,6 +21,10 @@ $router->get('/hello', function () {
     return 'hello wroldld!!!!';
 });
 
-$router->group(['prefix' => 'api/'], function () use ($router) {
-    $router->post('users/create', 'UserController@create');
+$router->group(['prefix' => 'api/v1'], function () use ($router) {
+    $router->get('/', 'UserController@index');
+    $router->post('/', 'UserController@create');
+    $router->get('/{id}', 'UserController@profile');
+    $router->put('/{id}', 'UserController@update');
+    $router->delete('/{id}', 'UserController@delete');
 });
