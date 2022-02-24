@@ -42,24 +42,37 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
-        return response()->json([
-            'message' => 'success',
-            $user,
-        );
+        return response()->json($user);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'username' => 'required|unique:users',
-            'email' => 'required|email|unique:users',
+            'username' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        return response()->json(
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Not found',
+            ], 404);
+        }
+
+        $password = $request->input('password');
+
+        if (Hash::check($user->password, $password)) {
+            return response()->json([
+                'message' => 'invalid password',
+            ], 404);
+        }
+
+        return response()->json([
             'message' => 'success',
             $user,
-        );
+        ]);
     }
 
     public function delete($id)
@@ -72,11 +85,16 @@ class UserController extends Controller
             ], 404);
         }
 
+        $password = $request->input('password');
+
+        if (Hash::check($user->password, $password)) {
+            return response()->json([
+                'message' => 'invalid password',
+            ], 404);
+        }
+
         $user->delete();
 
-        return response()->json([
-            'message' => 'success',
-            $user,
-        ]);
+        return response()->json($user);
     }
 }
