@@ -37,12 +37,24 @@ class UserController extends Controller
             'referrer' => 'nullable',
         ]);
 
+        $referrer_code = $request->input('referrer') ?? null;
+
+        if ($referrer_code) {
+            $referrer = User::where('referral', $referrer_code)->first();
+
+            if (!$referrer) {
+                return response()->json([
+                    'message' => 'Referral invalid',
+                ], 404);
+            }
+        }
+
         $user = User::create([
             'username' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'referral' =>  substr(base64_encode(md5(rand())), 5, 5),
-            'referrer' => $request->input('referrer') || null,
+            'referral' => substr(base64_encode(md5(rand())), 5, 5),
+            'referrer' => $referrer_code,
         ]);
 
         return response()->json($user);
@@ -78,7 +90,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         $user = User::find($id);
 

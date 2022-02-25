@@ -19,7 +19,7 @@ class UsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('referral')->unique();
-            $table->string('referrer')->nullable();
+            $table->string('referrer')->nullable()->default(null);
             $table->timestamps();
         });
     }
