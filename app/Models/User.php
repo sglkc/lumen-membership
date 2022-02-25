@@ -30,4 +30,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    public function referral()
+    {
+        return $this->hasMany(User::class, 'referrer', 'referral');
+    }
+
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referrer', 'referral');
+    }
 }

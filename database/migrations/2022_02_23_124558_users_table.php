@@ -18,6 +18,8 @@ class UsersTable extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('referral')->unique();
+            $table->string('referrer')->nullable();
             $table->timestamps();
         });
     }

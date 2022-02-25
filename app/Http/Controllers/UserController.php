@@ -34,12 +34,15 @@ class UserController extends Controller
             'username' => 'required|unique:users',
             'email' => 'required|email|unique:users',
             'password' => 'required',
+            'referrer' => 'nullable',
         ]);
 
         $user = User::create([
             'username' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
+            'referral' =>  substr(base64_encode(md5(rand())), 5, 5),
+            'referrer' => $request->input('referrer') || null,
         ]);
 
         return response()->json($user);
