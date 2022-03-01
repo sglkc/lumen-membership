@@ -26,8 +26,8 @@ class UserFactory extends Factory
             'username' => $this->faker->unique()->username,
             'email' => $this->faker->unique()->safeEmail,
             'password' => Hash::make('password'), // password
-            'referral' => substr(base64_encode(md5(rand())), 5, 5),
-            'referrer' => null,
+            'referral_code' => substr(base64_encode(md5(rand())), 5, 5),
+            'referrer_code' => null,
         ];
     }
 }

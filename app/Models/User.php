@@ -19,7 +19,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'username', 'email', 'password', 'referral', 'referrer',
+        'username', 'email', 'password', 'referral_code', 'referrer_code',
     ];
 
     /**
@@ -31,13 +31,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
-    public function referral_users()
+    public function referrals()
     {
-        return $this->hasMany(User::class, 'referrer', 'referral');
+        return $this->hasMany(User::class, 'referrer_code', 'referral_code');
     }
 
-    public function referrer_user()
+    public function referrer()
     {
-        return $this->belongsTo(User::class, 'referrer', 'referral');
+        return $this->belongsTo(User::class, 'referrer_code', 'referral_code');
     }
 }

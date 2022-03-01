@@ -17,7 +17,7 @@ class UserController extends Controller
 
     public function profile($id)
     {
-        $user = User::with('referrer_user', 'referral_users')->find($id);
+        $user = User::with('referrer', 'referrals')->find($id);
 
         if (!$user) {
             return response()->json([
@@ -34,17 +34,17 @@ class UserController extends Controller
             'username' => 'required|unique:users',
             'email' => 'required|email|unique:users',
             'password' => 'required',
-            'referrer' => 'nullable',
+            'referrer_code' => 'nullable',
         ]);
 
-        $referrer_code = $request->input('referrer') ?? null;
+        $referrer_code = $request->input('referrer_code') ?? null;
 
         if ($referrer_code) {
-            $referrer = User::where('referral', $referrer_code)->first();
+            $referrer = User::where('referral_code', $referrer_code)->first();
 
             if (!$referrer) {
                 return response()->json([
-                    'message' => 'Referral invalid',
+                    'message' => 'Referral code invalid',
                 ], 404);
             }
         }
@@ -53,8 +53,8 @@ class UserController extends Controller
             'username' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'referral' => substr(base64_encode(md5(rand())), 5, 5),
-            'referrer' => $referrer_code,
+            'referral_code' => substr(base64_encode(md5(rand())), 5, 5),
+            'referrer_code' => $referrer_code,
         ]);
 
         return response()->json($user);
