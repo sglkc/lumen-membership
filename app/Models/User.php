@@ -31,12 +31,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
-    public function referral()
+    public function referral_users()
     {
         return $this->hasMany(User::class, 'referrer', 'referral');
     }
 
-    public function referrer()
+    public function referrer_user()
     {
         return $this->belongsTo(User::class, 'referrer', 'referral');
     }

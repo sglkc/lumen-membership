@@ -17,7 +17,7 @@ class UserController extends Controller
 
     public function profile($id)
     {
-        $user = User::find($id);
+        $user = User::with('referrer_user', 'referral_users')->find($id);
 
         if (!$user) {
             return response()->json([
